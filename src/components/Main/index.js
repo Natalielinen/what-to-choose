@@ -3,8 +3,14 @@ import styles from './style.module.css';
 import { Button, ButtonGroup, CircularProgress, IconButton } from '@mui/material';
 import { movies } from '../../data/movies';
 import { Refresh } from '@mui/icons-material';
-import { food } from '../../data/food';
-import { games } from '../../data/games';
+import {
+    ARRAYS,
+    CHOICE_VERBS,
+    DELAY_MS,
+    FILTER_BUTTONS,
+    QUESTION_MARK_IMAGE,
+    QUESTION_TEMPLATES
+} from '../../resources/constants';
 
 const Main = () => {
 
@@ -21,90 +27,43 @@ const Main = () => {
 
     const [initialState, setInitialState] = useState(initialData);
 
-    const filterButtons = [
-        'Фильмы',
-        'Музыка',
-        'Книги',
-        'Еда',
-        'Игры'
-    ];
-
     const handleButtonClick = (text) => {
-        switch (text) {
-            case 'Фильмы':
-                setInitialState(prev => ({
-                    ...prev,
-                    choose: 'Посмотреть',
-                    data: movies
-                }));
-                break;
-            case 'Музыка':
-                setInitialState(prev => ({
-                    ...prev,
-                    choose: 'Послушать'
-                }));
-                break;
-            case 'Книги':
-                setInitialState(prev => ({
-                    ...prev,
-                    choose: 'Почитать'
-                }));
-                break;
-            case 'Еда':
-                setInitialState(prev => ({
-                    ...prev,
-                    choose: 'Поесть',
-                    data: food
-                }));
-                break;
-            case 'Игры':
-                setInitialState(prev => ({
-                    ...prev,
-                    choose: 'Поиграть',
-                    data: games
-                }));
-                break;
-            default:
-                setInitialState(prev => ({
-                    ...prev,
-                    choose: 'Посмотреть'
-                }));
-                break;
-        }
-
-        setInitialState(prev => ({
-            ...prev,
+        const updatedState = {
             isSelected: false,
             image: '',
             title: '',
             link: '',
-            current: text
-        }));
+            current: text,
+            choose: CHOICE_VERBS[text] || 'Посмотреть',
+            data: ARRAYS[text]
+        };
+
+        setInitialState(prev => ({ ...prev, ...updatedState }));
     };
 
-    const handleChoose = (arr) => {
+    const handleChoose = async (arr) => {
         setInitialState(prev => ({
             ...prev,
             isSelecting: true
         }));
-        const randomIndex = Math.floor(Math.random() * arr.length);
 
+        const randomIndex = Math.floor(Math.random() * arr.length);
         const item = arr[randomIndex];
 
-        setInitialState(prev => ({
-            ...prev,
+        const updatedState = {
             isSelected: true,
             image: item.image,
             title: item.title,
             link: item.link
-        }));
+        };
 
-        setTimeout(() => {
-            setInitialState(prev => ({
-                ...prev,
-                isSelecting: false
-            }));
-        }, 3000);
+        await new Promise(resolve => setTimeout(resolve, DELAY_MS));
+
+        setInitialState(prev => ({
+            ...prev,
+            ...updatedState,
+            isSelecting: false
+        }));
     };
 
     const handleRefresh = () => {
@@ -113,10 +72,10 @@ const Main = () => {
 
     return (
         <div className={styles.mainContainer}>
-            <div className={styles.buttons}>
+            <div>
                 <ButtonGroup variant="contained" aria-label="outlined primary button group" color="primary">
                     {
-                        filterButtons.map(fb => (
+                        FILTER_BUTTONS.map(fb => (
                             <Button
                                 className={initialState.current === fb ? styles.current : null}
                                 onClick={() => handleButtonClick(fb)}
@@ -127,8 +86,8 @@ const Main = () => {
                     }
                 </ButtonGroup>
             </div>
-            <h2 className={styles.header}>
-                Что {initialState.choose}?
+            <h2>
+                {QUESTION_TEMPLATES[initialState.current] || QUESTION_TEMPLATES.default} {initialState.choose}?
             </h2>
             <div className={styles.card}>
                 {
@@ -140,7 +99,7 @@ const Main = () => {
 
                             <div>
                                 <img
-                                    src={!initialState.isSelected ? 'https://proprikol.ru/wp-content/uploads/2020/07/kartinki-znak-voprosa-19.jpg' : initialState.image}
+                                    src={!initialState.isSelected ? QUESTION_MARK_IMAGE : initialState.image}
                                     alt=""
                                 />
                             </div>
