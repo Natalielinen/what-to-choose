@@ -77,6 +77,7 @@ const Main = () => {
                     {
                         FILTER_BUTTONS.map(fb => (
                             <Button
+                                key={fb}
                                 className={initialState.current === fb ? styles.current : null}
                                 onClick={() => handleButtonClick(fb)}
                             >
