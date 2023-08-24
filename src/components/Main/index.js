@@ -50,6 +50,9 @@ const Main = () => {
         const randomIndex = Math.floor(Math.random() * arr.length);
         const item = arr[randomIndex];
 
+        console.log('randomIndex', randomIndex);
+        console.log('arr', arr);
+
         const updatedState = {
             isSelected: true,
             image: item.image,
@@ -100,6 +103,7 @@ const Main = () => {
 
                             <div>
                                 <img
+                                   // src={movies[5].image}
                                     src={!initialState.isSelected ? QUESTION_MARK_IMAGE : initialState.image}
                                     alt=""
                                 />
