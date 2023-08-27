@@ -1,3 +1,9 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 .mainContainer {
     width: 100%;
     max-height: 100%;
