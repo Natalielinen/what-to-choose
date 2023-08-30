@@ -4,11 +4,10 @@ import {
     Button,
     ButtonGroup,
     CircularProgress,
-    Dialog,
+    Dialog, DialogActions,
     DialogContent,
     DialogTitle,
     IconButton,
-    Modal,
     Tooltip
 } from '@mui/material';
 import { movies } from '../../data/movies';
@@ -23,6 +22,9 @@ import {
     QUESTION_TEMPLATES
 } from '../../resources/constants';
 import FullList from '../List';
+import {setShowConfirmDeleteModal} from '../../slices/mainSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const Main = () => {
 
@@ -37,8 +39,13 @@ const Main = () => {
         data: movies
     };
 
+    const dispatch = useDispatch();
+
     const [initialState, setInitialState] = useState(initialData);
     const [open, setOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
+
+    const showConfirmDeleteModal = useSelector(state => state.main.showConfirmDeleteModal);
 
     const handleButtonClick = (text) => {
         const updatedState = {
@@ -83,9 +90,28 @@ const Main = () => {
         setInitialState(initialData);
     };
 
+    const handleCloseDeleteModal = () => {
+        dispatch(setShowConfirmDeleteModal(false));
+    }
+
+    const handleOpenDeleteModal = (li) => {
+        dispatch(setShowConfirmDeleteModal(true));
+
+        setItemToDelete(li);
+    }
+
+    const handleDeleteItem = () => {
+        setInitialState(prev => ({
+            ...prev,
+            data: prev.data.filter(item => item.id !== itemToDelete.id)
+        }));
+
+        handleCloseDeleteModal();
+    }
+
     return (
         <div className={styles.wrapper}>
-            <FullList list={initialState.data}/>
+            <FullList list={initialState.data} handleOpenDeleteModal={handleOpenDeleteModal}/>
             <div className={styles.mainContainer}>
                 <div>
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" color="primary">
@@ -150,6 +176,22 @@ const Main = () => {
                 <DialogContent>
                     Content
                 </DialogContent>
+            </Dialog>
+
+            <Dialog open={showConfirmDeleteModal} onClose={handleCloseDeleteModal}>
+                <DialogTitle className={styles.modalTitle}>
+                    <div>Удалить?</div>
+                    <IconButton onClick={handleCloseDeleteModal}>
+                        <ClearIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                    Вы действительно хотите удалить {ADD[initialState.current].toLowerCase()} <b>{itemToDelete?.title}</b> ?
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteItem}>Удалить</Button>
+                    <Button onClick={handleCloseDeleteModal}>Отменить</Button>
+                </DialogActions>
             </Dialog>
         </div>
     );

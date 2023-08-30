@@ -42,3 +42,9 @@
     align-items: center;
     column-gap: 12px;
 }
+
+.modalTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,13 +1,16 @@
 .list {
-    width: 500px;
+    width: 600px;
     list-style: none;
     margin: 0;
     padding: 2%;
 }
 
-.list li {
-    padding: 3% 4%;
+.list .listItem {
+    padding: 3% 2%;
     background-color: #ededed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .list li:nth-child(even) {
