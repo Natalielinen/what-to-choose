@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './style.module.css';
 import {
     Button,
@@ -25,6 +25,7 @@ import FullList from '../List';
 import {setShowConfirmDeleteModal} from '../../slices/mainSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import ClearIcon from '@mui/icons-material/Clear';
+import AddForm from '../AddForm';
 
 const Main = () => {
 
@@ -45,7 +46,7 @@ const Main = () => {
     const [open, setOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
 
-    const showConfirmDeleteModal = useSelector(state => state.main.showConfirmDeleteModal);
+    const {showConfirmDeleteModal} = useSelector(state => state.main);
 
     const handleButtonClick = (text) => {
         const updatedState = {
@@ -108,6 +109,9 @@ const Main = () => {
 
         handleCloseDeleteModal();
     }
+
+
+    console.log(initialState.data);
 
     return (
         <div className={styles.wrapper}>
@@ -172,9 +176,14 @@ const Main = () => {
                 </div>
             </div>
             <Dialog open={open} onClose={() => setOpen(false)} >
-                <DialogTitle>Добавить {ADD[initialState.current]}</DialogTitle>
+                <DialogTitle className={styles.modalTitle}>
+                    Добавить {ADD[initialState.current]}
+                    <IconButton onClick={() => setOpen(false)}>
+                        <ClearIcon />
+                    </IconButton>
+                </DialogTitle>
                 <DialogContent>
-                    Content
+                    <AddForm category={ADD[initialState.current].toLowerCase()} setOpen={setOpen} setInitialState={setInitialState}/>
                 </DialogContent>
             </Dialog>
 
