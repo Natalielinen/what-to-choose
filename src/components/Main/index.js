@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './style.module.css';
 import {
     Button,
@@ -22,10 +22,11 @@ import {
     QUESTION_TEMPLATES
 } from '../../resources/constants';
 import FullList from '../List';
-import {setShowConfirmDeleteModal} from '../../slices/mainSlice';
+import {setShowConfirmDeleteModal, setOpenEditModal} from '../../slices/mainSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import ClearIcon from '@mui/icons-material/Clear';
 import AddForm from '../AddForm';
+import EditForm from '../EditForm';
 
 const Main = () => {
 
@@ -45,8 +46,9 @@ const Main = () => {
     const [initialState, setInitialState] = useState(initialData);
     const [open, setOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
+    const [itemToEdit, setItemToEdit] = useState(null);
 
-    const {showConfirmDeleteModal} = useSelector(state => state.main);
+    const {showConfirmDeleteModal, openEditModal} = useSelector(state => state.main);
 
     const handleButtonClick = (text) => {
         const updatedState = {
@@ -110,12 +112,19 @@ const Main = () => {
         handleCloseDeleteModal();
     }
 
+    const handleOpenEditModal = li => {
+        console.log(li);
+        setItemToEdit(li);
+        dispatch(setOpenEditModal(true));
+    }
 
-    console.log(initialState.data);
+    const handleCloseEditModal = () => {
+        dispatch(setOpenEditModal(false));
+    }
 
     return (
         <div className={styles.wrapper}>
-            <FullList list={initialState.data} handleOpenDeleteModal={handleOpenDeleteModal}/>
+            <FullList list={initialState.data} handleOpenDeleteModal={handleOpenDeleteModal} handleOpenEditModal={handleOpenEditModal}/>
             <div className={styles.mainContainer}>
                 <div>
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" color="primary">
@@ -201,6 +210,23 @@ const Main = () => {
                     <Button onClick={handleDeleteItem}>Удалить</Button>
                     <Button onClick={handleCloseDeleteModal}>Отменить</Button>
                 </DialogActions>
+            </Dialog>
+
+            <Dialog open={openEditModal} onClose={() => dispatch(setOpenEditModal(false))} >
+                <DialogTitle className={styles.modalTitle}>
+                    Редактировать {ADD[initialState.current].toLowerCase()} {itemToEdit?.title}
+                    <IconButton onClick={() => dispatch(setOpenEditModal(false))}>
+                        <ClearIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                    <EditForm
+                        category={ADD[initialState.current].toLowerCase()}
+                        handleCloseEditModal={handleCloseEditModal}
+                        setInitialState={setInitialState}
+                        item={itemToEdit}
+                    />
+                </DialogContent>
             </Dialog>
         </div>
     );

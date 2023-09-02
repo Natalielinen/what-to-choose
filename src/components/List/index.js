@@ -4,7 +4,7 @@ import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-const List = ({list, handleOpenDeleteModal}) => {
+const List = ({list, handleOpenDeleteModal, handleOpenEditModal}) => {
 
     return (
         <ul className={styles.list}>
@@ -13,7 +13,7 @@ const List = ({list, handleOpenDeleteModal}) => {
                     return <li key={item.id} className={styles.listItem}>
                         <div>{item.title}</div>
                         <div>
-                            <IconButton><EditIcon/></IconButton>
+                            <IconButton onClick={() => handleOpenEditModal(item)}><EditIcon/></IconButton>
                             <IconButton onClick={() => handleOpenDeleteModal(item)}><DeleteForeverIcon/></IconButton>
                         </div>
                     </li>;

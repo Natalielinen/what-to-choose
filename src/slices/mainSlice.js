@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    showConfirmDeleteModal: false
+    showConfirmDeleteModal: false,
+    openEditModal: false
 };
 
 export const MainSlice = createSlice({
@@ -10,10 +11,13 @@ export const MainSlice = createSlice({
     reducers: {
         setShowConfirmDeleteModal: (state, action) => {
             state.showConfirmDeleteModal = action.payload;
+        },
+        setOpenEditModal: (state, action) => {
+            state.openEditModal = action.payload;
         }
     }
 
 });
 
-export const {setShowConfirmDeleteModal} = MainSlice.actions;
+export const {setShowConfirmDeleteModal, setOpenEditModal} = MainSlice.actions;
 export default MainSlice.reducer;
