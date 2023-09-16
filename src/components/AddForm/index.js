@@ -30,7 +30,6 @@ const AddForm = ({category, setOpen, setInitialState}) => {
             ...prev,
             data: [...prev.data, newItem]
         }));
-
     }
 
     return (
