@@ -34,5 +34,11 @@ export const games = [
         title: "Съедобное-несъедобное",
         link: "",
         image: "https://wachanga-res.cloudinary.com/c_fill,h_630,q_85,w_1200/7cab0448015cd671e7fd66d412c4dc7b.png"
+    },
+    {
+        id: 7,
+        title: "Камень-ножницы-бумага",
+        link: "",
+        image: "https://benzo-electro-instrument.ru/wp-content/uploads/5/5/c/55c76d5b128c9c2983f4c81bb3a8a630.jpeg"
     }
 ]

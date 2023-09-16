@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ClearIcon from '@mui/icons-material/Clear';
 import AddForm from '../AddForm';
 import EditForm from '../EditForm';
+import user from '../../assets/images/userDefault.png';
 
 const Main = () => {
 
@@ -182,6 +183,11 @@ const Main = () => {
                     <IconButton aria-label="refresh" onClick={handleRefresh}>
                         <Refresh/>
                     </IconButton>
+                </div>
+            </div>
+            <div className={styles.userBlock}>
+                <div className={styles.avatarContainer}>
+                    <img src={user} alt="user"/>
                 </div>
             </div>
             <Dialog open={open} onClose={() => setOpen(false)} >

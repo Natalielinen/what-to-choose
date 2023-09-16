@@ -48,3 +48,15 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.userBlock {
+    padding: 2%;
+}
+
+.userBlock .avatarContainer {
+    cursor: pointer;
+}
+
+.userBlock .avatarContainer:hover {
+   opacity: 0.7;
+}
