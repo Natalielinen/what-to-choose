@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './style.module.css';
 import { useForm } from 'react-hook-form';
 import { Button, Stack, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
 
@@ -18,20 +19,27 @@ const RegisterPage = () => {
 
     const {errors} = formState;
 
+    const navigate = useNavigate();
+
     const passwordsCompare = form.getValues('password') !== form.getValues('password2');
 
     const onSubmit = data => {
-       if (data.password !== data.password2) {
-           setError("password2", {
-               type: "manual",
-               message: "Пароли не совпадают",
-           })
-           return;
-       }
+        if (data.password !== data.password2) {
+            setError('password2', {
+                type: 'manual',
+                message: 'Пароли не совпадают'
+            });
+            return;
+        }
 
+        navigate('/');
         console.log(data);
 
-    }
+    };
+
+    const onLoginButtonClick = () => {
+        navigate('/login');
+    };
 
     return (
         <div className={styles.registerPage}>
@@ -61,13 +69,13 @@ const RegisterPage = () => {
                         label="Пароль"
                         type="password"
                         variant="standard"
-                        {...register('password', {required: true,})}
+                        {...register('password', {required: true})}
                     />
 
                     <TextField
                         required
                         error={errors.password2 || passwordsCompare}
-                        helperText={passwordsCompare ? "Пароли не совпадают" : ''}
+                        helperText={passwordsCompare ? 'Пароли не совпадают' : ''}
                         label="Повторите пароль"
                         type="password"
                         variant="standard"
@@ -77,8 +85,9 @@ const RegisterPage = () => {
                     <Button type="submit" variant="contained">Зарегистрироваться</Button>
                 </Stack>
             </form>
+            <p>Уже есть аккаунт?<Button variant="text" onClick={onLoginButtonClick}>Войти</Button></p>
         </div>
-    )
-}
+    );
+};
 
 export default RegisterPage;
