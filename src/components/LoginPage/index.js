@@ -20,7 +20,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const onSubmit = data => {
-        //TODO: Должна быть проверка существует ли такой пользователь  правильный ли пароль/email
+        //TODO: Должна быть проверка существует ли такой пользователь и правильный ли пароль/email
         console.log(data);
         navigate('/');
 
@@ -28,6 +28,10 @@ const LoginPage = () => {
 
     const onRegisterButtonClick = () => {
         navigate("/register");
+    }
+
+    const onRecoveryPasswordButtonClick = () => {
+        navigate("/recovery")
     }
 
     return (
@@ -57,6 +61,7 @@ const LoginPage = () => {
                 </Stack>
             </form>
             <p>Еще не зарегистрированы?<Button variant="text" onClick={onRegisterButtonClick}>Регистрация</Button></p>
+            <p>Забыли пароль?<Button variant="text" onClick={onRecoveryPasswordButtonClick}>восстановить</Button></p>
         </div>
     )
 }
