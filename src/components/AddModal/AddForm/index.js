@@ -1,8 +1,8 @@
 import React from 'react';
-import { TextField, Button, Stack } from '@mui/material';
+import { Button, Stack, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
-const AddForm = ({category, setOpen, setInitialState}) => {
+const AddForm = ({category, closeModal, setInitialState}) => {
 
     const form = useForm({
         defaultValues: {
@@ -16,7 +16,7 @@ const AddForm = ({category, setOpen, setInitialState}) => {
 
     const onSubmit = data => {
         console.log(data);
-        setOpen(false);
+        closeModal();
 
         const newItem = {
             id: Math.random() * 10000 ,
