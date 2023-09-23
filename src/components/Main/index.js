@@ -4,7 +4,8 @@ import {
     Button,
     ButtonGroup,
     CircularProgress,
-    Dialog, DialogActions,
+    Dialog,
+    DialogActions,
     DialogContent,
     DialogTitle,
     IconButton,
@@ -22,12 +23,12 @@ import {
     QUESTION_TEMPLATES
 } from '../../resources/constants';
 import FullList from '../List';
-import {setShowConfirmDeleteModal, setOpenEditModal} from '../../slices/mainSlice';
+import { setOpenAddModal, setOpenEditModal, setShowConfirmDeleteModal } from '../../slices/mainSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import ClearIcon from '@mui/icons-material/Clear';
-import AddForm from '../AddForm';
 import EditForm from '../EditForm';
-import user from '../../assets/images/userDefault.png';
+import UserBlock from '../UserBlock';
+import AddModal from '../AddModal';
 
 const Main = () => {
 
@@ -45,7 +46,6 @@ const Main = () => {
     const dispatch = useDispatch();
 
     const [initialState, setInitialState] = useState(initialData);
-    const [open, setOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [itemToEdit, setItemToEdit] = useState(null);
 
@@ -96,13 +96,13 @@ const Main = () => {
 
     const handleCloseDeleteModal = () => {
         dispatch(setShowConfirmDeleteModal(false));
-    }
+    };
 
     const handleOpenDeleteModal = (li) => {
         dispatch(setShowConfirmDeleteModal(true));
 
         setItemToDelete(li);
-    }
+    };
 
     const handleDeleteItem = () => {
         setInitialState(prev => ({
@@ -111,21 +111,22 @@ const Main = () => {
         }));
 
         handleCloseDeleteModal();
-    }
+    };
 
     const handleOpenEditModal = li => {
         console.log(li);
         setItemToEdit(li);
         dispatch(setOpenEditModal(true));
-    }
+    };
 
     const handleCloseEditModal = () => {
         dispatch(setOpenEditModal(false));
-    }
+    };
 
     return (
         <div className={styles.wrapper}>
-            <FullList list={initialState.data} handleOpenDeleteModal={handleOpenDeleteModal} handleOpenEditModal={handleOpenEditModal}/>
+            <FullList list={initialState.data} handleOpenDeleteModal={handleOpenDeleteModal}
+                      handleOpenEditModal={handleOpenEditModal}/>
             <div className={styles.mainContainer}>
                 <div>
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" color="primary">
@@ -174,7 +175,7 @@ const Main = () => {
                 </div>
                 <div className={styles.button}>
                     <Tooltip title={`Добавить ${ADD[initialState.current]}`}>
-                        <IconButton onClick={() => setOpen(true)}>
+                        <IconButton onClick={() => dispatch(setOpenAddModal(true))}>
                             <Add/>
                         </IconButton>
                     </Tooltip>
@@ -185,32 +186,20 @@ const Main = () => {
                     </IconButton>
                 </div>
             </div>
-            <div className={styles.userBlock}>
-                <div className={styles.avatarContainer}>
-                    <img src={user} alt="user"/>
-                </div>
-            </div>
-            <Dialog open={open} onClose={() => setOpen(false)} >
-                <DialogTitle className={styles.modalTitle}>
-                    Добавить {ADD[initialState.current]}
-                    <IconButton onClick={() => setOpen(false)}>
-                        <ClearIcon />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent>
-                    <AddForm category={ADD[initialState.current].toLowerCase()} setOpen={setOpen} setInitialState={setInitialState}/>
-                </DialogContent>
-            </Dialog>
+            <UserBlock/>
+
+            <AddModal current={ADD[initialState.current]} setInitialState={setInitialState}/>
 
             <Dialog open={showConfirmDeleteModal} onClose={handleCloseDeleteModal}>
                 <DialogTitle className={styles.modalTitle}>
                     <div>Удалить?</div>
                     <IconButton onClick={handleCloseDeleteModal}>
-                        <ClearIcon />
+                        <ClearIcon/>
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
-                    Вы действительно хотите удалить {ADD[initialState.current].toLowerCase()} <b>{itemToDelete?.title}</b> ?
+                    Вы действительно хотите удалить {ADD[initialState.current].toLowerCase()}
+                    <b>{itemToDelete?.title}</b> ?
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleDeleteItem}>Удалить</Button>
@@ -218,11 +207,11 @@ const Main = () => {
                 </DialogActions>
             </Dialog>
 
-            <Dialog open={openEditModal} onClose={() => dispatch(setOpenEditModal(false))} >
+            <Dialog open={openEditModal} onClose={() => dispatch(setOpenEditModal(false))}>
                 <DialogTitle className={styles.modalTitle}>
                     Редактировать {ADD[initialState.current].toLowerCase()} {itemToEdit?.title}
                     <IconButton onClick={() => dispatch(setOpenEditModal(false))}>
-                        <ClearIcon />
+                        <ClearIcon/>
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
