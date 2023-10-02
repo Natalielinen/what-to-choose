@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import LoginPage from './components/LoginPage';
 import PasswordRecoveryPage from './components/PasswordRecoveryPage';
 import LinkSentPage from './components/LinkSentPage';
+import Settings from './components/Settings';
 
 function App () {
     const user1 = {
@@ -33,6 +34,7 @@ function App () {
                 <Route path="login" element={<LoginPage/>}/>
                 <Route path="recovery" element={<PasswordRecoveryPage/>}/>
                 <Route path="linkSent" element={<LinkSentPage/>}/>
+                <Route path="settings" element={<Settings />} />
             </Routes>
         </>
     );
