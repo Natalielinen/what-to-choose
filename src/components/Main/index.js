@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './style.module.css';
 import { Button, ButtonGroup, CircularProgress, IconButton, Tooltip } from '@mui/material';
 import { movies } from '../../data/movies';
@@ -19,6 +19,7 @@ import UserBlock from '../UserBlock';
 import AddModal from '../AddModal';
 import DeleteModal from '../DeleteModal';
 import EditModal from '../EditModal';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
 
 const Main = () => {
 
@@ -30,7 +31,7 @@ const Main = () => {
         isSelecting: false,
         title: '',
         link: '',
-        data: movies
+        data: []
     };
 
     const dispatch = useDispatch();
@@ -38,8 +39,39 @@ const Main = () => {
     const [initialState, setInitialState] = useState(initialData);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [itemToEdit, setItemToEdit] = useState(null);
+    const [fbMovies, setFbMovies] = useState([]);
 
+    const db = getFirestore();
+
+    /* TODO: movies заменить на переменную, в которую по клику будет попадать название БД*/
+    const colRef = collection(db, 'movies');
+
+    useEffect(() => {
+
+        getDocs(colRef)
+            .then((snapshot) => {
+                const movies = [];
+                snapshot.docs.forEach(doc => {
+                    movies.push({...doc.data(), id: doc.id});
+                });
+
+                setFbMovies(movies);
+
+                const newState = {
+                    ...initialData,
+                    data: movies
+                };
+
+                setInitialState(newState);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
+
+    /** TODO: по клику на кнопку, должен идти запрос getDocs */
     const handleButtonClick = (text) => {
+
         const updatedState = {
             isSelected: false,
             image: '',
@@ -47,7 +79,7 @@ const Main = () => {
             link: '',
             current: text,
             choose: CHOICE_VERBS[text] || 'Посмотреть',
-            data: ARRAYS[text]
+            data: text === 'Фильмы' ? fbMovies : ARRAYS[text]
         };
 
         setInitialState(prev => ({...prev, ...updatedState}));
@@ -167,7 +199,7 @@ const Main = () => {
             <DeleteModal setInitialState={setInitialState} itemToDelete={itemToDelete}
                          current={ADD[initialState.current]}/>
 
-            <EditModal setInitialState={setInitialState} itemToEdit={itemToEdit} current={ADD[initialState.current]} />
+            <EditModal setInitialState={setInitialState} itemToEdit={itemToEdit} current={ADD[initialState.current]}/>
         </div>
     );
 };

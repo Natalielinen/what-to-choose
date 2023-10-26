@@ -8,6 +8,10 @@ import LoginPage from './components/LoginPage';
 import PasswordRecoveryPage from './components/PasswordRecoveryPage';
 import LinkSentPage from './components/LinkSentPage';
 import Settings from './components/Settings';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from './config';
+
+initializeApp(firebaseConfig);
 
 function App () {
     const user1 = {
@@ -19,6 +23,11 @@ function App () {
     const navigate = useNavigate();
 
     const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        // Perform Firebase Authentication here to check if the user is logged in.
+        // If not, you can redirect to the registration or login page.
+    }, []);
 
     useEffect(() => {
         if (!user) {
@@ -34,7 +43,7 @@ function App () {
                 <Route path="login" element={<LoginPage/>}/>
                 <Route path="recovery" element={<PasswordRecoveryPage/>}/>
                 <Route path="linkSent" element={<LinkSentPage/>}/>
-                <Route path="settings" element={<Settings />} />
+                <Route path="settings" element={<Settings/>}/>
             </Routes>
         </>
     );

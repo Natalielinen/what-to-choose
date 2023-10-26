@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     showConfirmDeleteModal: false,
     openEditModal: false,
-    openAddModal: false
+    openAddModal: false,
+    movies: []
 };
 
 export const MainSlice = createSlice({
@@ -18,10 +19,13 @@ export const MainSlice = createSlice({
         },
         setOpenAddModal: (state, action) => {
             state.openAddModal = action.payload;
+        },
+        setMovies: (state, action) => {
+            state.movies = action.payload;
         }
     }
 
 });
 
-export const {setShowConfirmDeleteModal, setOpenEditModal, setOpenAddModal} = MainSlice.actions;
+export const {setShowConfirmDeleteModal, setOpenEditModal, setOpenAddModal, setMovies} = MainSlice.actions;
 export default MainSlice.reducer;
